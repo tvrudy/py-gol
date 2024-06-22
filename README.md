@@ -7,14 +7,15 @@
 - Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 ---
 ### Running the Game!
-- Windows =>
+- Windows 
     ``` powershell
-    PS> py .\gol.py
+    > py .\gol.py <TPS> <GENERATIONS>
     ```
-- *nix =>   
+- MacOS and GNU/Linux   
     ``` console
-    $ ./gol.py
+    $ ./gol.py <TPS> <GENERATIONS>
     ```
+> **TPS** and **GENERATIONS** are not mandatory arguments. 
 ---
 ### Example =>
 ![Game](./game.jpg)

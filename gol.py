@@ -6,6 +6,7 @@
 
 import os
 import time as T
+from sys import argv
 
 def console_clear() -> None | OSError:
     os.system("clear")
@@ -17,8 +18,10 @@ class Board:
 
     ROWS = 0
     COLUMNS = 0
-    TPS = 15
-    GENERATIONS = 100
+
+    # Ticks Per Second
+    TPS = 30
+    GENERATIONS = 200
 
     def __init__(self, board: [[str]], rows: int, column: int) -> None:
 
@@ -43,7 +46,7 @@ class Board:
 
         return nebr
 
-    def next_gen(self) -> None:
+    def next_gen(self, gen: int) -> None:
         N: int = 0
 
         for r in range(self.ROWS):
@@ -57,30 +60,39 @@ class Board:
                     self.new_Board[r][c] = self.GOLBoard[r][c]
             
         self.GOLBoard, self.new_Board = self.new_Board, self.GOLBoard
-        self.render_board()
+        self.render_board(gen)
 
-    def render_board(self) -> None:
+    def render_board(self, gen: int) -> None:
         console_clear()
 
+        print(f"---- {gen} Gen ----")
         for r in range(self.ROWS):
             for c in range(self.COLUMNS):
                 print(self.GOLBoard[r][c], end=' ')
             print()
+        
 
 # Seed Configuration
 b: [[str]] = [
-    ['.', '#', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '#', '.', '.', '.', '.', '.'],
-    ['#', '#', '#', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '#', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '#', '.', '.', '.', '.', '.'],
+    ['.', '#', '#', '#', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
 ]
 
 B = Board(b, len(b), len(b[0]))
 
-for i in range(B.GENERATIONS):
-    B.next_gen()
+# Set TPS and GENERATIONS via cmdline args
+if (len(argv) == 3):
+    B.TPS = int(argv[1])
+    B.GENERATIONS = int(argv[2])
+elif (len(argv) == 2):
+    B.TPS = int(argv[1])
+
+for g in range(1, B.GENERATIONS + 1):
+    B.next_gen(g)
     T.sleep(1 / B.TPS)
